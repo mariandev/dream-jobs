@@ -31,7 +31,7 @@ export class WorkerPool {
 		}
 
 		this._workers = workers;
-		this._availableWorkers = workers;
+		this._availableWorkers = [...workers];
 	}
 
 
@@ -55,7 +55,7 @@ export class WorkerPool {
 		if(this._workersQueue.length) {
 			this._workersQueue.shift()(worker);
 		} else {
-			this._availableWorkers.push();
+			this._availableWorkers.push(worker);
 		}
 	}
 }
