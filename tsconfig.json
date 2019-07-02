@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "target": "esnext",
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "removeComments": true,
+    "sourceMap": false,
+    "declaration": true,
+    "lib": ["dom", "es5", "esnext", "esnext.array", "webworker"],
+    "baseUrl": "./src",
+    "downlevelIteration": true
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "./src/index.ts"
+  ]
+}
