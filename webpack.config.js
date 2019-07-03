@@ -38,7 +38,7 @@ module.exports = {
 	output: {
 		filename: 'dream-jobs.js',
 		path: path.resolve(__dirname, "dist"),
-		libraryTarget: "window"
+		libraryTarget: "umd"
 	},
 	plugins: [
 		new DtsBundlePlugin(),
