@@ -14,7 +14,8 @@
     "build-prod": "PROD=1 yarn build",
     "watch": "webpack-cli --watch",
     "watch-prod": "PROD=1 yarn watch",
-    "docs": "typedoc"
+    "docs": "typedoc",
+    "test": "echo ok"
   },
   "dependencies": {},
   "devDependencies": {
