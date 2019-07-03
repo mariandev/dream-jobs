@@ -3,7 +3,7 @@ import {Job} from './Job';
 type CommandType = "register" | "process";
 type CommandArgs<TIn> = {
 	jobId: number,
-	args: TIn
+	jobArgs: TIn
 };
 type Command<TIn> = {
 	type: CommandType,
@@ -16,14 +16,14 @@ export abstract class BaseWorker {
 	public RegisterJob(job: Job<unknown, unknown>) {
 		return this.SendCommand("register", {
 			jobId: job.JobId,
-			args: job.JobFn.toString()
+			jobArgs: job.JobFn.toString()
 		});
 	}
 
-	public Run<TIn, TOut>(job: Job<TIn, TOut>, args: TIn): Promise<TOut> {
+	public Run<TIn, TOut>(job: Job<TIn, TOut>, jobArgs: TIn): Promise<TOut> {
 		return this.SendCommand<TIn, TOut>("process", {
 			jobId: job.JobId,
-			args
+			jobArgs
 		});
 	}
 }
@@ -42,13 +42,14 @@ export class WebWorker extends BaseWorker {
 
 			switch (type) {
 				case 'register':
-					const [, ...fnArgs] = fnBreaker.exec(args.args as string);
+					const [, ...fnArgs] = fnBreaker.exec(args.jobArgs as string);
+					if(fnArgs.length !== 2) throw new Error(`Provided function for job #${args.jobId} has an unsupported syntax.\nPlease write the functions as follows "function(args) {}".\nMultiple arguments and arrow functions are not supported.`);
 					jobs[args.jobId] = new Function(...fnArgs) as (args: unknown) => unknown;
 
 					send();
 					break;
 				case 'process':
-					const maybeResult = jobs[args.jobId](args.args);
+					const maybeResult = jobs[args.jobId](args.jobArgs);
 
 					Promise.resolve(maybeResult)
 						.then(result => send(result))
@@ -74,13 +75,13 @@ export class WebWorker extends BaseWorker {
 		});
 	}
 
-	protected SendCommand<TIn, TOut>(command: CommandType, args: CommandArgs<TIn>): Promise<TOut> {
+	protected SendCommand<TIn, TOut>(command: CommandType, jobArgs: CommandArgs<TIn>): Promise<TOut> {
 		return new Promise(resolve => {
 			this._resolveTask = resolve;
 
 			this._worker.postMessage({
 				type: command,
-				args
+				jobArgs
 			})
 		});
 	}
@@ -92,7 +93,7 @@ export class MainThreadWorker extends BaseWorker {
 	protected SendCommand<TIn, TOut>(command: CommandType, args: CommandArgs<TIn>): Promise<TOut> {
 		switch(command) {
 			case 'process':
-				return Promise.resolve(this._jobs[args.jobId](args.args) as TOut);
+				return Promise.resolve(this._jobs[args.jobId](args.jobArgs) as TOut);
 		}
 	}
 

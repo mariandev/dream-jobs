@@ -1,6 +1,6 @@
 {
   "name": "dream-jobs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": "https://github.com/mariandev/dream-jobs",
   "main": "dist/dream-jobs.js",
   "files": [
@@ -11,7 +11,9 @@
   "scripts": {
     "setup": "yarn",
     "build": "webpack-cli",
+    "build-prod": "PROD=1 yarn build",
     "watch": "webpack-cli --watch",
+    "watch-prod": "PROD=1 yarn watch",
     "docs": "typedoc"
   },
   "dependencies": {},

@@ -10,12 +10,8 @@ export class Scheduler {
 	}
 
 	public async Schedule<TIn, TOut>(job: Job<TIn, TOut>, args: TIn): Promise<TOut> {
-		const worker = await WorkerPool
-			.Instance
-			.GetWorker();
-
-		const result = worker
-			.Run(job, args);
+		const worker = await WorkerPool.Instance.GetWorker();
+		const result = worker.Run(job, args);
 
 		result.then(() => {
 			WorkerPool.Instance.ReleaseWorker(worker);

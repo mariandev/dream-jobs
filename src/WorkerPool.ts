@@ -12,21 +12,17 @@ export class WorkerPool {
 	private readonly _workers: ReadonlyArray<BaseWorker> = [];
 	private readonly _availableWorkers: BaseWorker[] = [];
 
-	private _workersQueue: ((worker: BaseWorker) => void)[] = [];
+	private _workerRequestQueue: ((worker: BaseWorker) => void)[] = [];
 
 	constructor() {
 		const workers = [] as BaseWorker[];
 		if(typeof window["Worker"] === "undefined") {
-			workers.push(
-				new MainThreadWorker()
-			)
+			workers.push(new MainThreadWorker())
 		} else {
 			const cores = navigator && navigator.hardwareConcurrency || 4;
 
 			for(let i = 0;i < cores; i++) {
-				workers.push(
-					new WebWorker()
-				);
+				workers.push(new WebWorker());
 			}
 		}
 
@@ -36,9 +32,13 @@ export class WorkerPool {
 
 
 	public async RegisterJob<TIn, TOut>(job: Job<TIn, TOut>) {
+		const results = [] as Promise<unknown>[];
 		for(let worker of this._workers) {
-			await worker.RegisterJob(job);
+			results.push(
+				worker.RegisterJob(job)
+			)
 		}
+		return Promise.all(results);
 	}
 
 	public GetWorker(): Promise<BaseWorker> {
@@ -46,14 +46,14 @@ export class WorkerPool {
 			return Promise.resolve(this._availableWorkers.shift());
 		} else {
 			return new Promise(resolve => {
-				this._workersQueue.push(resolve);
+				this._workerRequestQueue.push(resolve);
 			});
 		}
 	}
 
 	public ReleaseWorker(worker: BaseWorker) {
-		if(this._workersQueue.length) {
-			this._workersQueue.shift()(worker);
+		if(this._workerRequestQueue.length) {
+			this._workerRequestQueue.shift()(worker);
 		} else {
 			this._availableWorkers.push(worker);
 		}
