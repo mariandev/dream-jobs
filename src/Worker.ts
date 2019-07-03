@@ -75,13 +75,13 @@ export class WebWorker extends BaseWorker {
 		});
 	}
 
-	protected SendCommand<TIn, TOut>(command: CommandType, jobArgs: CommandArgs<TIn>): Promise<TOut> {
+	protected SendCommand<TIn, TOut>(command: CommandType, args: CommandArgs<TIn>): Promise<TOut> {
 		return new Promise<TOut>(resolve => {
 			this._resolveTask = resolve;
 
 			this._worker.postMessage({
 				type: command,
-				jobArgs
+				args
 			})
 		});
 	}
