@@ -1,6 +1,6 @@
 {
 	"name": "Dream Jobs",
-	"mode": "modules",
+	"mode": "file",
 	"out": "docs",
 	"hideGenerator": true,
 	"sourcefile-url-prefix": "https://github.com/mariandev/dream-jobs/tree/master/src/",

@@ -24,6 +24,10 @@ export class Job<TIn, TOut> {
 	}
 }
 
+/**
+ * Internal
+ * @hidden
+ */
 class JobIdGen {
 	private static _id = 0;
 	public static get Gen() {
