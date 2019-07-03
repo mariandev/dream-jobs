@@ -13,7 +13,7 @@ type Command<TIn> = {
 export abstract class BaseWorker {
 	protected abstract SendCommand<TIn, TOut>(command: CommandType, args: CommandArgs<TIn>): Promise<TOut>;
 
-	public RegisterJob(job: Job<unknown, unknown>) {
+	public RegisterJob(job: Job<unknown, unknown>): Promise<unknown> {
 		return this.SendCommand("register", {
 			jobId: job.JobId,
 			jobArgs: job.JobFn.toString()
@@ -76,7 +76,7 @@ export class WebWorker extends BaseWorker {
 	}
 
 	protected SendCommand<TIn, TOut>(command: CommandType, jobArgs: CommandArgs<TIn>): Promise<TOut> {
-		return new Promise(resolve => {
+		return new Promise<TOut>(resolve => {
 			this._resolveTask = resolve;
 
 			this._worker.postMessage({
@@ -99,6 +99,6 @@ export class MainThreadWorker extends BaseWorker {
 
 	public RegisterJob(job: Job<unknown, unknown>) {
 		this._jobs[job.JobId] = job.JobFn;
-		return Promise.resolve();
+		return Promise.resolve<unknown>(null);
 	}
 }

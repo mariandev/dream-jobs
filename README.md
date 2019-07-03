@@ -1,8 +1,7 @@
-# dream-jobs
-> Offload computationally heavy tasks to Web Workers in supported browsers
+### Offload computationally heavy tasks to Web Workers in supported browsers
+###### Unsupported browsers will run the jobs on the main thread automatically
 
-
-### Example
+### Examples
 
 ```javascript
 const AddNumbers = new Job(function(args) {

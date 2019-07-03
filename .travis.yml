@@ -1,0 +1,28 @@
+language: node_js
+node_js: '8'
+cache: yarn
+
+before_script:
+- yarn setup
+- yarn build
+
+after_success:
+- |
+  if [ $TRAVIS_BRANCH == "master" ] || [ $TRAVIS_BRANCH == $TRAVIS_TAG ]; then
+    yarn docs
+  fi
+deploy:
+- provider: pages
+  skip_cleanup: true
+  local_dir: docs/
+  github_token: $GITHUB_TOKEN
+  on:
+    tags: true
+    branch: master
+- provider: npm
+  email: mariandev96@gmail.com
+  api_key: $NPM_API_KEY
+  skip_cleanup: true
+  on:
+    tags: true
+    branch: master
