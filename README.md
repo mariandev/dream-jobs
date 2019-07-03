@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/mariandev/dream-jobs.svg?branch=master)](https://travis-ci.com/mariandev/dream-jobs)
+
 ### Offload computationally heavy tasks to Web Workers in supported browsers
 ###### Unsupported browsers will run the jobs on the main thread automatically
 
