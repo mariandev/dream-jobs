@@ -2,13 +2,27 @@ import {WorkerPool} from './WorkerPool';
 import {Scheduler} from './Scheduler';
 
 export class Job<TIn, TOut> {
+	/** @readonly */
 	public readonly JobId: number;
 
+	/** @readonly */
+	public readonly JobFn: (args: TIn) => TOut;
+
+	/**
+	 * Internal
+	 * @hidden
+	 */
 	private _ready: boolean = false;
+
+	/**
+	 * Internal
+	 * @hidden
+	 */
 	private readonly _readyPr: Promise<unknown>;
 
-	constructor(public JobFn: (args: TIn) => TOut) {
+	constructor(JobFn: (args: TIn) => TOut) {
 		this.JobId = JobIdGen.Gen;
+		this.JobFn = JobFn;
 
 		this._readyPr = WorkerPool.Instance.RegisterJob(this);
 		this._readyPr.then(() => this._ready = true);

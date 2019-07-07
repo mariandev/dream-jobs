@@ -1,15 +1,33 @@
 import {Job} from './Job';
 
+/**
+ * Internal
+ * @hidden
+ */
 type CommandType = "register" | "process";
+
+/**
+ * Internal
+ * @hidden
+ */
 type CommandArgs<TIn> = {
 	jobId: number,
 	jobArgs: TIn
 };
+
+/**
+ * Internal
+ * @hidden
+ */
 type Command<TIn> = {
 	type: CommandType,
 	args: CommandArgs<TIn>
 }
 
+/**
+ * Internal
+ * @hidden
+ */
 export abstract class BaseWorker {
 	protected abstract SendCommand<TIn, TOut>(command: CommandType, args: CommandArgs<TIn>): Promise<TOut>;
 
@@ -28,6 +46,10 @@ export abstract class BaseWorker {
 	}
 }
 
+/**
+ * Internal
+ * @hidden
+ */
 export class WebWorker extends BaseWorker {
 	private static WorkerScript = function() {
 		const jobs: {[jobId: number]: (args: unknown) => unknown} = {};
@@ -87,6 +109,10 @@ export class WebWorker extends BaseWorker {
 	}
 }
 
+/**
+ * Internal
+ * @hidden
+ */
 export class MainThreadWorker extends BaseWorker {
 	private _jobs: {[jobId: number]: (args: unknown) => unknown} = {};
 

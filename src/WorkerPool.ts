@@ -1,6 +1,10 @@
 import {Job} from './Job';
 import {MainThreadWorker, BaseWorker, WebWorker} from "./Worker";
 
+/**
+ * Internal
+ * @hidden
+ */
 export class WorkerPool {
 	private static _instance: WorkerPool;
 	public static get Instance(): WorkerPool {

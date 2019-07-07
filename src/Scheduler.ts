@@ -1,6 +1,10 @@
 import {WorkerPool} from './WorkerPool';
 import {Job} from './Job';
 
+/**
+ * Internal
+ * @hidden
+ */
 export class Scheduler {
 	private static _instance: Scheduler;
 	public static get Instance(): Scheduler {
