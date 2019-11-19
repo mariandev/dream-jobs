@@ -29,7 +29,7 @@ export class Job<TIn, TOut> {
 		this._readyPr.catch(console.error)
 	}
 
-	public async Schedule(args: TIn): Promise<TOut> {
+	public async RunWith(args: TIn): Promise<TOut> {
 		if(!this._ready) {
 			await this._readyPr;
 		}
