@@ -15,7 +15,7 @@ const AddNumbers = new Job(function(args) {
 });
 
 AddNumbers
-	.Schedule([1, 2, 3, 4, 5])
+	.RunWith([1, 2, 3, 4, 5])
 	.then(function(sum) {
 		console.log(sum);
 	});
@@ -33,13 +33,13 @@ const NthFibonacci = new Job(function(n) {
 });
 
 NthFibonacci
-	.Schedule(10)
+	.RunWith(10)
 	.then(function(nthFibonacci) {
 		console.log(nthFibonacci);
 	});
 
 NthFibonacci
-	.Schedule(10000)
+	.RunWith(10000)
 	.then(function(nthFibonacci) {
 		console.log(nthFibonacci);
 	});
